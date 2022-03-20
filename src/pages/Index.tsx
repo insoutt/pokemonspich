@@ -9,6 +9,8 @@ interface Props {
 
 interface State {
     pokemons: Pokemon[];
+    pokemon?: Pokemon;
+    formTitle: string;
 }
 
 class Index extends Component<Props, State> {
@@ -20,6 +22,8 @@ class Index extends Component<Props, State> {
 
         this.state = {
             pokemons: [],
+            pokemon: undefined,
+            formTitle: 'Nuevo Pokemon',
         }
     }
 
@@ -39,9 +43,13 @@ class Index extends Component<Props, State> {
                     <button>Nuevo</button>
                 </div>
             </div>
-            <Table onDelete={this.onDelete.bind(this)} pokemons={this.state.pokemons}/>
+            <Table pokemons={this.state.pokemons}
+                   onDelete={this.onDelete.bind(this)}
+                   onEdit={this.onEdit.bind(this)}/>
 
-            <Form title="Nuevo Pokemon" onSubmit={this.onCreate.bind(this)}/>
+            <Form title={this.state.formTitle}
+                  pokemon={this.state.pokemon}
+                  onSubmit={this.onCreate.bind(this)}/>
         </main>);
     }
 
@@ -59,18 +67,50 @@ class Index extends Component<Props, State> {
         this.setState({pokemons});
     }
 
+    showOnly(pokemon: Pokemon) {
+        const pokemons = this.pokemons.filter(pokemonList => pokemonList.id === pokemon.id);
+        this.setState({pokemons});
+    }
+
+    clearSearch() {
+        this.search('');
+    }
+
     onCreate(pokemon: Pokemon) {
-        this.search('') // Limpiar búsqueda
-        this.pokemons.push(pokemon);
-        this.setState({
-            pokemons: this.pokemons,
+        this.clearSearch();
+        if (typeof this.state.pokemon === 'undefined') {
+            this.pokemons.push(pokemon);
+            this.setState({pokemons: this.pokemons})
+            return;
+        }
+
+        this.pokemons.forEach(pokemonList => {
+            if (pokemonList.id === pokemon.id) {
+                pokemonList.name = pokemon.name;
+                pokemonList.image = pokemon.image;
+                pokemonList.type = pokemon.type;
+                pokemonList.attack = pokemon.attack;
+                pokemonList.defense = pokemon.defense;
+                pokemonList.hp = pokemon.hp;
+            }
         })
+
+        this.setState({pokemons: this.pokemons})
+        alert(`Pokemon ${pokemon.name} actualizado correctamente`);
     }
 
     onDelete(pokemon: Pokemon) {
         this.pokemons = this.pokemons.filter(pokemonList => pokemonList.id !== pokemon.id);
         this.setState({
             pokemons: this.pokemons,
+        })
+    }
+
+    onEdit(pokemon: Pokemon) {
+        this.showOnly(pokemon);
+        this.setState({
+            pokemon,
+            formTitle: `Actualizar pokemon ${pokemon.name}`,
         })
     }
 }

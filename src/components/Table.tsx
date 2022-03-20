@@ -6,7 +6,8 @@ import Icon from "../components/Icon";
 
 interface Props {
     pokemons: Pokemon[];
-    onDelete: (pokemon: Pokemon) => void
+    onDelete?: (pokemon: Pokemon) => void
+    onEdit?: (pokemon: Pokemon) => void
 }
 
 interface State {
@@ -46,7 +47,7 @@ class Table extends Component<Props, State> {
                         <td className="text-right">{pokemon.attack}</td>
                         <td className="text-right">{pokemon.defense}</td>
                         <td className="text-center">
-                            <button className="btn btn-primary">
+                            <button onClick={() => this.edit(pokemon)} className="btn btn-primary">
                                 <Icon icon={pencil}/>
                             </button>
                             <button disabled={this.state.isDeleting} onClick={() => this.delete(pokemon)} className="btn btn-primary">
@@ -64,7 +65,9 @@ class Table extends Component<Props, State> {
         PokemonService.delete(pokemon.id)
             .then(pokemonResponse => {
                 alert(`Pokemon ${pokemonResponse.name} eliminado correctamente`);
-                this.props.onDelete(pokemon);
+                if (typeof this.props.onDelete === 'function') {
+                    this.props.onDelete(pokemon);
+                }
             })
             .catch(() => {
                 alert(`No ha podido eliminar el pokemon ${pokemon.name}, compruebe su conexión a Internet`);
@@ -72,6 +75,12 @@ class Table extends Component<Props, State> {
             .finally(() => {
                 this.setState({isDeleting: false});
             })
+    }
+
+    private edit(pokemon: Pokemon) {
+        if (typeof this.props.onEdit === 'function') {
+            this.props.onEdit(pokemon);
+        }
     }
 }
 

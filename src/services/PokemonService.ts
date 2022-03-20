@@ -46,8 +46,13 @@ export default {
         });
     },
     
-    update(id: number, data: Pokemon) {
-        return HttpService.put(id.toString(), data);
+    update(id: number, data: PokemonCreate): Promise<Pokemon> {
+        data = {...data, ...{idAuthor: 1}};
+        return new Promise((resolve, reject) => {
+            HttpService.put(id.toString(), data)
+                .then(response => resolve(response.data))
+                .catch(error => reject(error));
+        })
     },
     
     delete(id: number): Promise<Pokemon> {
