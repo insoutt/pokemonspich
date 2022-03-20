@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import Table from "../components/Table";
 import Form from "../components/Form";
 import PokemonService, {Pokemon} from "../services/PokemonService";
+import Search from "../components/Search";
 
 interface Props {
 }
@@ -11,6 +12,8 @@ interface State {
 }
 
 class Index extends Component<Props, State> {
+
+    pokemons: Pokemon[] = []
 
     constructor(props: Props) {
         super(props);
@@ -31,9 +34,7 @@ class Index extends Component<Props, State> {
             </h1>
 
             <div className="flex justify-between">
-                <div>
-                    <input type="text"/>
-                </div>
+                <Search onSearch={this.search.bind(this)}/>
                 <div>
                     <button>Nuevo</button>
                 </div>
@@ -47,9 +48,14 @@ class Index extends Component<Props, State> {
     getPokemons() {
         console.log('getpokemons')
         PokemonService.list().then(pokemons => {
-            console.log(pokemons);
+            this.pokemons = pokemons;
             this.setState({pokemons});
         })
+    }
+
+    search(value: string) {
+        const pokemons = this.pokemons.filter(pokemon => pokemon.name.toLocaleLowerCase().indexOf(value) !== -1);
+        this.setState({pokemons});
     }
 }
 
