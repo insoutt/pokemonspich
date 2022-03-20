@@ -34,8 +34,15 @@ export default {
         })
     },
 
-    get(id: number) {
-        return HttpService.post(id.toString());
+    count(): Promise<number> {
+        return new Promise((resolve, reject) => {
+            HttpService.get('count')
+                .then(response => {
+                    console.log('res', response.data)
+                    resolve(response.data)
+                })
+                .catch(error => reject(error));
+        })
     },
     
     list(): Promise<Pokemon[]> {

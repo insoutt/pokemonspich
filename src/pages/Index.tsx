@@ -11,6 +11,7 @@ interface State {
     pokemons: Pokemon[];
     pokemon?: Pokemon;
     formTitle: string;
+    total: number;
 }
 
 class Index extends Component<Props, State> {
@@ -21,6 +22,7 @@ class Index extends Component<Props, State> {
         super(props);
 
         this.state = {
+            total: 0,
             pokemons: [],
             pokemon: undefined,
             formTitle: 'Nuevo Pokemon',
@@ -29,6 +31,7 @@ class Index extends Component<Props, State> {
 
     componentDidMount() {
         this.getPokemons();
+        this.getCount();
     }
 
     render() {
@@ -44,6 +47,7 @@ class Index extends Component<Props, State> {
                 </div>
             </div>
             <Table pokemons={this.state.pokemons}
+                   total={this.state.total}
                    onDelete={this.onDelete.bind(this)}
                    onEdit={this.onEdit.bind(this)}/>
 
@@ -60,6 +64,15 @@ class Index extends Component<Props, State> {
             console.log(pokemons)
             this.setState({pokemons});
         })
+    }
+
+    getCount() {
+        PokemonService.count().then(total => {
+            this.setState({total})
+        }).catch(() => {
+            this.setState({total: 0})
+            alert('No se ha podido obtener el total de pokemones, compruebe su conexión a Internet e intente nuevamente.');
+        });
     }
 
     search(value: string) {
@@ -79,6 +92,7 @@ class Index extends Component<Props, State> {
     onCreate(pokemon: Pokemon) {
         this.clearSearch();
         if (typeof this.state.pokemon === 'undefined') {
+            this.getCount();
             this.pokemons.push(pokemon);
             this.setState({pokemons: this.pokemons})
             return;

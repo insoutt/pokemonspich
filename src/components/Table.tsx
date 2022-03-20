@@ -8,6 +8,7 @@ interface Props {
     pokemons: Pokemon[];
     onDelete?: (pokemon: Pokemon) => void
     onEdit?: (pokemon: Pokemon) => void
+    total: number
 }
 
 interface State {
@@ -56,6 +57,14 @@ class Table extends Component<Props, State> {
                         </td>
                     </tr>
                 ))}
+                {!!this.props.pokemons.length && <tr>
+                    <td colSpan={6}>
+                        <div className="text-center">
+                            Se muestran {this.props.pokemons.length} de {this.props.total} pokemones
+                        </div>
+                    </td>
+                </tr>}
+
             </tbody>
         </table>);
     }
