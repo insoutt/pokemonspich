@@ -30,3 +30,16 @@ table td, table th {
 table img {
     max-width: 100px;
 }
+
+.alert {
+    padding: 1rem;
+    max-width: 600px;
+    margin: 1rem auto;
+    text-align: center;
+}
+
+.alert-danger {
+    color: #811e27;
+    background-color: #f8d6d9;
+    border-color: #f1bfc4;
+}

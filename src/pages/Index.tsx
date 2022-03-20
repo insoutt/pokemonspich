@@ -41,7 +41,7 @@ class Index extends Component<Props, State> {
             </div>
             <Table pokemons={this.state.pokemons}/>
 
-            <Form title="Nuevo Pokemon"/>
+            <Form title="Nuevo Pokemon" onSubmit={this.onCreate.bind(this)}/>
         </main>);
     }
 
@@ -56,6 +56,14 @@ class Index extends Component<Props, State> {
     search(value: string) {
         const pokemons = this.pokemons.filter(pokemon => pokemon.name.toLocaleLowerCase().indexOf(value) !== -1);
         this.setState({pokemons});
+    }
+
+    onCreate(pokemon: Pokemon) {
+        this.search('') // Limpiar búsqueda
+        this.pokemons.push(pokemon);
+        this.setState({
+            pokemons: this.pokemons,
+        })
     }
 }
 
