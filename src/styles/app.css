@@ -1,0 +1,33 @@
+
+.flex {
+    display: flex;
+}
+
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 0px;
+    grid-auto-rows: minmax(50px, auto);
+}
+
+.text-center {
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table td, table th {
+    padding: 10px;
+    margin: 0;
+    border: 1px solid black;
+}
+
+table img {
+    max-width: 100px;
+}
