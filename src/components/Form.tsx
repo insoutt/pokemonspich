@@ -79,10 +79,8 @@ class Form extends Component<Props, State> {
         }
     }
 
-    componentWillReceiveProps(nextProps: Readonly<Props>, nextContext: any) {
-        if (this.props.pokemon?.id !== nextProps.pokemon?.id) {
-            this.setPokemon(nextProps.pokemon);
-        }
+    componentDidMount() {
+        this.setPokemon(this.props.pokemon);
     }
 
     render() {
