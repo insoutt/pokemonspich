@@ -5,6 +5,7 @@ import PokemonService, {Pokemon, PokemonType} from "../services/PokemonService";
 interface Props {
     title: string
     onSubmit: (pokemon: Pokemon) => void
+    onCancel?: () => void
     pokemon?: Pokemon
 }
 
@@ -121,7 +122,7 @@ class Form extends Component<Props, State> {
                     <button onClick={this.submit.bind(this)} className="btn btn=primary">
                         Guardar
                     </button>
-                    <button onClick={this.clear.bind(this)} className="btn btn=secondary">
+                    <button onClick={this.cancel.bind(this)} className="btn btn=secondary">
                         Cancelar
                     </button>
                 </div>
@@ -193,6 +194,13 @@ class Form extends Component<Props, State> {
         }
 
         this.update();
+    }
+
+    private cancel() {
+        if (typeof this.props.onCancel === 'function') {
+            this.props.onCancel();
+        }
+        this.clear();
     }
 
     private clear() {

@@ -3,6 +3,8 @@ import Table from "../components/Table";
 import Form from "../components/Form";
 import PokemonService, {Pokemon} from "../services/PokemonService";
 import Search from "../components/Search";
+import Icon from "../components/Icon";
+import plus from '../assets/icons/plus.svg';
 
 interface Props {
 }
@@ -12,6 +14,8 @@ interface State {
     pokemon?: Pokemon;
     formTitle: string;
     total: number;
+    showForm: boolean;
+    showTable: boolean;
 }
 
 class Index extends Component<Props, State> {
@@ -26,6 +30,8 @@ class Index extends Component<Props, State> {
             pokemons: [],
             pokemon: undefined,
             formTitle: 'Nuevo Pokemon',
+            showForm: false,
+            showTable: true,
         }
     }
 
@@ -36,24 +42,27 @@ class Index extends Component<Props, State> {
 
     render() {
         return (<main>
-            <h1>
+            {this.state.showTable && <h1>
                 Listado de Pokemon
-            </h1>
+            </h1>}
 
-            <div className="flex justify-between">
+            {this.state.showTable && <div className="flex justify-between">
                 <Search onSearch={this.search.bind(this)}/>
                 <div>
-                    <button>Nuevo</button>
+                    <button onClick={this.create.bind(this)} className="btn btn-primary">
+                        <Icon icon={plus}/> Nuevo
+                    </button>
                 </div>
-            </div>
-            <Table pokemons={this.state.pokemons}
-                   total={this.state.total}
-                   onDelete={this.onDelete.bind(this)}
-                   onEdit={this.onEdit.bind(this)}/>
+            </div>}
+            {this.state.showTable && <Table pokemons={this.state.pokemons}
+                    total={this.state.total}
+                    onDelete={this.onDelete.bind(this)}
+                    onEdit={this.onEdit.bind(this)}/>}
 
-            <Form title={this.state.formTitle}
+            {this.state.showForm && <Form title={this.state.formTitle}
+                  onCancel={this.onCancel.bind(this)}
                   pokemon={this.state.pokemon}
-                  onSubmit={this.onCreate.bind(this)}/>
+                  onSubmit={this.onCreate.bind(this)}/>}
         </main>);
     }
 
@@ -89,6 +98,12 @@ class Index extends Component<Props, State> {
         this.search('');
     }
 
+    onCancel() {
+        this.clearSearch();
+        this.showTable();
+        this.closeForm()
+    }
+
     onCreate(pokemon: Pokemon) {
         this.clearSearch();
         if (typeof this.state.pokemon === 'undefined') {
@@ -122,10 +137,32 @@ class Index extends Component<Props, State> {
 
     onEdit(pokemon: Pokemon) {
         this.showOnly(pokemon);
+        this.showForm();
         this.setState({
             pokemon,
             formTitle: `Actualizar pokemon ${pokemon.name}`,
         })
+    }
+
+    create() {
+        this.closeTable();
+        this.showForm();
+    }
+
+    showForm() {
+        this.setState({showForm: true})
+    }
+
+    closeForm() {
+        this.setState({showForm: false})
+    }
+
+    showTable() {
+        this.setState({showTable: true})
+    }
+
+    closeTable() {
+        this.setState({showTable: false})
     }
 }
 
