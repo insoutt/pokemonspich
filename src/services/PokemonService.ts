@@ -1,12 +1,17 @@
 import HttpService from "./HttpService";
 
-interface Pokemon {
-    name: string
-    image: string
-    attack: number
-    defense: number
+export interface Pokemon {
+    id: number;
+    name: string;
+    image: string;
+    type: string;
+    hp: number;
+    attack: number;
+    defense: number;
+    idAuthor: number;
+    created_at: string;
+    updated_at: string;
 }
-
 
 export default {
     create(data: Pokemon) {
@@ -21,8 +26,12 @@ export default {
         return HttpService.post(id.toString());
     },
     
-    list() {
-        return HttpService.get('/');
+    list(): Promise<Pokemon[]> {
+        return new Promise<Pokemon[]>((resolve, reject) => {
+            HttpService.get('/')
+                .then(response => resolve(response.data))
+                .catch(error => reject(error));
+        });
     },
     
     update(id: number, data: Pokemon) {

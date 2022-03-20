@@ -1,23 +1,15 @@
 import React, {Component} from "react";
+import {Pokemon} from "../services/PokemonService";
+import pencil from '../assets/icons/pencil.svg';
+import trash from '../assets/icons/delete.svg';
+import Icon from "../components/Icon";
 
 interface Props {
+    pokemons: Pokemon[];
 }
 
 interface State {
 
-}
-
-export interface Pokemon {
-    id: number;
-    name: string;
-    image: string;
-    type: string;
-    hp: number;
-    attack: number;
-    defense: number;
-    idAuthor: number;
-    created_at: string;
-    updated_at: string;
 }
 
 class Table extends Component<Props, State> {
@@ -33,18 +25,31 @@ class Table extends Component<Props, State> {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Ivysaur</td>
-                    <td className="text-center">
-                        <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/012.png" alt="Pokemon"/>
-                    </td>
-                    <td>65</td>
-                    <td>38</td>
-                    <td>
-                        <button>E</button>
-                        <button>D</button>
-                    </td>
-                </tr>
+            {!this.props.pokemons.length && <tr>
+                <td colSpan={6}>
+                    <div className="text-center">
+                        No existen registros de pokemones por el momento.
+                    </div>
+                </td>
+            </tr>}
+                {this.props.pokemons.map(pokemon => (
+                    <tr key={pokemon.id}>
+                        <td>{pokemon.name}</td>
+                        <td className="text-center">
+                            <img src={pokemon.image} alt={pokemon.name}/>
+                        </td>
+                        <td className="text-right">{pokemon.attack}</td>
+                        <td className="text-right">{pokemon.defense}</td>
+                        <td className="text-center">
+                            <button className="btn btn-primary">
+                                <Icon icon={pencil}/>
+                            </button>
+                            <button className="btn btn-primary">
+                                <Icon icon={trash}/>
+                            </button>
+                        </td>
+                    </tr>
+                ))}
             </tbody>
         </table>);
     }
