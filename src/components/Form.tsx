@@ -1,6 +1,10 @@
 import React, {Component} from "react";
 import ValidationProvider from "../providers/ValidationProvider";
 import PokemonService, {Pokemon, PokemonType} from "../services/PokemonService";
+import save from '../assets/icons/save.svg';
+import cancel from '../assets/icons/close.svg';
+import Icon from "./Icon";
+import plus from "../assets/icons/plus.svg";
 
 interface Props {
     title: string
@@ -120,10 +124,10 @@ class Form extends Component<Props, State> {
                 </div>
                 <div className="flex justify-center">
                     <button onClick={this.submit.bind(this)} className="btn btn=primary">
-                        Guardar
+                        <Icon icon={save}/> Guardar
                     </button>
                     <button onClick={this.cancel.bind(this)} className="btn btn=secondary">
-                        Cancelar
+                        <Icon icon={cancel}/> Cancelar
                     </button>
                 </div>
             </form>
