@@ -21,7 +21,7 @@ class Search extends Component<Props, State> {
             <div>
                 <Icon icon={search}/>
             </div>
-            <input value={this.state.value} onChange={this.update.bind(this)} type="text"/>
+            <input value={this.state.value} placeholder="Buscar..." onChange={this.update.bind(this)} type="text"/>
         </div>);
     }
 

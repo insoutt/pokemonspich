@@ -48,10 +48,10 @@ class Table extends Component<Props, State> {
                         <td className="text-right">{pokemon.attack}</td>
                         <td className="text-right">{pokemon.defense}</td>
                         <td className="text-center">
-                            <button onClick={() => this.edit(pokemon)} className="btn btn-primary">
+                            <button aria-label="edit" onClick={() => this.edit(pokemon)} className="btn btn-primary">
                                 <Icon icon={pencil}/>
                             </button>
-                            <button disabled={this.state.isDeleting} onClick={() => this.delete(pokemon)} className="btn btn-primary">
+                            <button aria-label="delete" disabled={this.state.isDeleting} onClick={() => this.delete(pokemon)} className="btn btn-primary">
                                 <Icon icon={trash}/>
                             </button>
                         </td>
