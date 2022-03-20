@@ -50,7 +50,11 @@ export default {
         return HttpService.put(id.toString(), data);
     },
     
-    delete(id: number) {
-        return HttpService.delete(id.toString());
+    delete(id: number): Promise<Pokemon> {
+        return new Promise((resolve, reject) => {
+            HttpService.delete(id.toString())
+                .then(response => resolve(response.data))
+                .catch(error => reject(error));
+        });
     }
 }

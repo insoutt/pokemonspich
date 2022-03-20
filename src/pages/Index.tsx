@@ -39,7 +39,7 @@ class Index extends Component<Props, State> {
                     <button>Nuevo</button>
                 </div>
             </div>
-            <Table pokemons={this.state.pokemons}/>
+            <Table onDelete={this.onDelete.bind(this)} pokemons={this.state.pokemons}/>
 
             <Form title="Nuevo Pokemon" onSubmit={this.onCreate.bind(this)}/>
         </main>);
@@ -49,6 +49,7 @@ class Index extends Component<Props, State> {
         console.log('getpokemons')
         PokemonService.list().then(pokemons => {
             this.pokemons = pokemons;
+            console.log(pokemons)
             this.setState({pokemons});
         })
     }
@@ -61,6 +62,13 @@ class Index extends Component<Props, State> {
     onCreate(pokemon: Pokemon) {
         this.search('') // Limpiar búsqueda
         this.pokemons.push(pokemon);
+        this.setState({
+            pokemons: this.pokemons,
+        })
+    }
+
+    onDelete(pokemon: Pokemon) {
+        this.pokemons = this.pokemons.filter(pokemonList => pokemonList.id !== pokemon.id);
         this.setState({
             pokemons: this.pokemons,
         })

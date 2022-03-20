@@ -1,18 +1,23 @@
 import React, {Component} from "react";
-import {Pokemon} from "../services/PokemonService";
+import PokemonService, {Pokemon} from "../services/PokemonService";
 import pencil from '../assets/icons/pencil.svg';
 import trash from '../assets/icons/delete.svg';
 import Icon from "../components/Icon";
 
 interface Props {
     pokemons: Pokemon[];
+    onDelete: (pokemon: Pokemon) => void
 }
 
 interface State {
-
+    isDeleting: boolean
 }
 
 class Table extends Component<Props, State> {
+    state = {
+        isDeleting: false,
+    }
+
     render() {
         return (<table>
             <thead>
@@ -44,7 +49,7 @@ class Table extends Component<Props, State> {
                             <button className="btn btn-primary">
                                 <Icon icon={pencil}/>
                             </button>
-                            <button className="btn btn-primary">
+                            <button disabled={this.state.isDeleting} onClick={() => this.delete(pokemon)} className="btn btn-primary">
                                 <Icon icon={trash}/>
                             </button>
                         </td>
@@ -52,6 +57,21 @@ class Table extends Component<Props, State> {
                 ))}
             </tbody>
         </table>);
+    }
+
+    private delete(pokemon: Pokemon) {
+        this.setState({isDeleting: true});
+        PokemonService.delete(pokemon.id)
+            .then(pokemonResponse => {
+                alert(`Pokemon ${pokemonResponse.name} eliminado correctamente`);
+                this.props.onDelete(pokemon);
+            })
+            .catch(() => {
+                alert(`No ha podido eliminar el pokemon ${pokemon.name}, compruebe su conexión a Internet`);
+            })
+            .finally(() => {
+                this.setState({isDeleting: false});
+            })
     }
 }
 
