@@ -1,8 +1,7 @@
 import React from 'react';
-import {render, fireEvent, screen, within, act} from '@testing-library/react';
+import {render, fireEvent, screen} from '@testing-library/react';
 import Form from './Form';
-import PokemonService, {Pokemon, PokemonCreate} from "../services/PokemonService";
-jest.mock("../services/PokemonService");
+import {Pokemon} from "../services/PokemonService";
 
 const pokemons: Pokemon[] = [
   {

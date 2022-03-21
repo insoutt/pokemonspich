@@ -7,7 +7,9 @@ export default class ValidationProvider {
     static image(value: string): boolean {
         try {
             const url = new URL(value);
-
+            if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+                return false;
+            }
             // Optimizar validación para aceptar solo imágenes en png ó jpg
             const regex = new RegExp(/(\.png|\.jpg)$/i);
             return regex.test(url.pathname);
@@ -16,8 +18,12 @@ export default class ValidationProvider {
         }
     }
 
-    static number(value: string): boolean {
+    static number(value: string | number): boolean {
         const regex = new RegExp(/[0-9]+/i);
+
+        if (typeof value === 'number') {
+            value = value.toString();
+        }
 
         if (!regex.test(value)) {
             return false;
