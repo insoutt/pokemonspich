@@ -4,6 +4,7 @@ import PokemonService, {Pokemon, PokemonType} from "../services/PokemonService";
 import save from '../assets/icons/save.svg';
 import cancel from '../assets/icons/close.svg';
 import Icon from "./Icon";
+import styles from './Form.module.css';
 
 interface Props {
     title: string
@@ -83,8 +84,8 @@ class Form extends Component<Props, State> {
     }
 
     render() {
-        return (<div>
-            <h3 className="text-center">
+        return (<section className={styles.form}>
+            <h3 className="text-center font-pokemon">
                 { this.props.title }
             </h3>
 
@@ -93,21 +94,21 @@ class Form extends Component<Props, State> {
             </div>}
 
             <form onSubmit={event => event.preventDefault()}>
-                <div className="grid">
-                    <div className="grid-item">
+                <div className="grid font-pokemon">
+                    <div className={styles.gridItem}>
                         <label htmlFor="name">Nombre:</label> <input id="name" value={this.state.name} onChange={(event) => this.updateInput(event, 'name')} type="text"/>
                     </div>
-                    <div className="grid-item">
+                    <div className={styles.gridItem}>
                         <label htmlFor="attack">Ataque:</label> <input id="attack" value={this.state.attack} onChange={(event) => this.updateInput(event, 'attack')} type="text"/>
                     </div>
-                    <div className="grid-item">
+                    <div className={styles.gridItem}>
                         <label htmlFor="image">Imagen:</label> <input id="image" value={this.state.image} onChange={(event) => this.updateInput(event, 'image')} type="text"/>
                     </div>
-                    <div className="grid-item">
+                    <div className={styles.gridItem}>
                         <label htmlFor="defense">Defensa:</label> <input id="defense" value={this.state.defense} onChange={(event) => this.updateInput(event, 'defense')} type="text"/>
                     </div>
 
-                    <div className="grid-item">
+                    <div className={styles.gridItem}>
                         <label htmlFor="type">Tipo:</label>
                         <select id="type" value={this.state.type} onChange={(event) => this.updateInput(event, 'type')}>
                             <option value="">Seleccione...</option>
@@ -115,21 +116,21 @@ class Form extends Component<Props, State> {
                         </select>
                     </div>
 
-                    <div className="grid-item">
+                    <div className={styles.gridItem}>
                         <label htmlFor="hp">HP:</label> <input id="hp" value={this.state.hp} onChange={(event) => this.updateInput(event, 'hp')} type="text"/>
                     </div>
                 </div>
                 <div className="flex justify-center">
-                    <button aria-label="Guardar" onClick={this.submit.bind(this)} className="btn btn=primary">
+                    <button aria-label="Guardar" onClick={this.submit.bind(this)} className="btn btn-icon">
                         <Icon icon={save}/> Guardar
                     </button>
-                    <button aria-label="Cancelar" onClick={this.cancel.bind(this)} className="btn btn=secondary">
+                    <button aria-label="Cancelar" onClick={this.cancel.bind(this)} className="btn btn-icon">
                         <Icon icon={cancel}/> Cancelar
                     </button>
                 </div>
             </form>
 
-        </div>);
+        </section>);
     }
 
     private updateInput(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, name: InputType) {

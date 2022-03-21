@@ -1,0 +1,12 @@
+
+.form {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 2px solid #0075BE;
+    background: #FFDE00;
+}
+
+.gridItem {
+    margin: 0.5rem;
+    display: flex;
+}

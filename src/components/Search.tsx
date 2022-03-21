@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import Icon from "./Icon";
 import search from '../assets/icons/magnify.svg'
+import styles from './Search.module.css';
 
 interface Props {
     onSearch?: (value: string) => void;
@@ -17,11 +18,11 @@ class Search extends Component<Props, State> {
     };
 
     render() {
-        return (<div className="flex">
-            <div>
+        return (<div className={styles.container}>
+            <div className={styles.icon}>
                 <Icon icon={search}/>
             </div>
-            <input value={this.state.value} placeholder="Buscar..." onChange={this.update.bind(this)} type="text"/>
+            <input className={styles.search} value={this.state.value} placeholder="Buscar..." onChange={this.update.bind(this)} type="text"/>
         </div>);
     }
 

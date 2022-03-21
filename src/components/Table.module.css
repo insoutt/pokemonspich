@@ -1,0 +1,41 @@
+
+thead {
+    background: #0075BE;
+    color: white;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 1rem;
+}
+
+tr {
+    border: 2px solid #0075BE;
+    border-radius: 10px;
+}
+
+table td, table th {
+    padding: 10px;
+    margin: 0;
+}
+
+table img {
+    max-width: 100px;
+}
+
+.tr:nth-child(even) {
+    font-family: 'Press Start 2P', cursive;
+    background-color: rgb(0 117 190 / 15%);
+}
+
+.tr:nth-child(odd) {
+    font-family: 'Press Start 2P', cursive;
+    background-color: rgb(213 161 0 / 20%);
+}
+
+
+.trFooter {
+    background: #0075BE;
+    color: white;
+}

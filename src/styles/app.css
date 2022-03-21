@@ -1,34 +1,26 @@
 
-.flex {
-    display: flex;
-}
-
-.justify-between { justify-content: space-between; }
-.justify-center { justify-content: center; }
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 0;
-    grid-auto-rows: minmax(50px, auto);
-}
-
-.text-center { text-align: center; }
-.text-right { text-align: right; }
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-table td, table th {
-    padding: 10px;
+body {
+    box-sizing: border-box;
+    font-size: 16px;
+    background: #fffeed;
+    padding: 0;
     margin: 0;
-    border: 1px solid black;
+    font-family: 'Montserrat', sans-serif;
 }
 
-table img {
-    max-width: 100px;
+input, select {
+    border: 2px solid #0075BE;
+    padding: 0.5rem;
+    border-radius: 10px;
+    width: 100%;
+    background: rgb(0 117 190 / 15%);
+}
+input:focus {
+    box-shadow: 4px 5px #4459a8;
+}
+
+input:focus-visible, select:focus-visible {
+    outline: none;
 }
 
 .alert {
@@ -42,4 +34,78 @@ table img {
     color: #811e27;
     background-color: #f8d6d9;
     border-color: #f1bfc4;
+}
+
+.btn {
+    cursor: pointer;
+    margin: 5px;
+    background: #e8d9ff;
+    border: 2px solid #50514f;
+    border-radius: 10px;
+    font-size: 1rem;
+    padding: 0.5rem;
+}
+
+.btn:hover {
+    background: #cba8ff;
+}
+
+.btn-circle {
+    border-radius: 1000px;
+    width: 45px;
+    height: 45px;
+}
+
+.btn-icon {
+    display: flex;
+    align-items: center;
+}
+
+.container {
+    padding: 1rem;
+}
+
+.font-base {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.font-pokemon {
+    font-family: 'Press Start 2P', cursive;
+}
+
+.flex {
+    display: flex;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 0;
+    grid-auto-rows: minmax(50px, auto);
+}
+
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+
+.mb-2 {
+    margin-bottom: 1rem;
+}
+
+.shadow-png {
+    transition: filter .5s;
+    filter: drop-shadow(10px 15px 0px #222);
+}
+
+.shadow-png:hover {
+    filter: none;
+}
+
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+
+.title-pokemon {
+    text-shadow: -3px 2px 2px #0a285f;
+    font-size: 3rem;
+    color: #FFCC00;
 }

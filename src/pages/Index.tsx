@@ -41,15 +41,15 @@ class Index extends Component<Props, State> {
     }
 
     render() {
-        return (<main>
-            {this.state.showTable && <h1>
-                Listado de Pokemon
+        return (<main className="container">
+            {this.state.showTable && <h1 className="text-center font-pokemon title-pokemon">
+                Pokemon
             </h1>}
 
-            {this.state.showTable && <div className="flex justify-between">
+            {this.state.showTable && <div className="flex justify-between mb-2">
                 <Search onSearch={this.search.bind(this)}/>
                 <div>
-                    <button onClick={this.create.bind(this)} className="btn btn-primary">
+                    <button onClick={this.create.bind(this)} className="btn btn-icon btn-primary">
                         <Icon icon={plus}/> Nuevo
                     </button>
                 </div>
@@ -145,6 +145,7 @@ class Index extends Component<Props, State> {
     }
 
     create() {
+        this.setState({pokemon: undefined});
         this.closeTable();
         this.showForm();
     }
