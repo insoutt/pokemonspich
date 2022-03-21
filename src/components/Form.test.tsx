@@ -1,7 +1,8 @@
 import React from 'react';
 import {render, fireEvent, screen, within, act} from '@testing-library/react';
 import Form from './Form';
-import {Pokemon} from "../services/PokemonService";
+import PokemonService, {Pokemon, PokemonCreate} from "../services/PokemonService";
+jest.mock("../services/PokemonService");
 
 const pokemons: Pokemon[] = [
   {
@@ -30,25 +31,50 @@ const pokemons: Pokemon[] = [
   },
 ];
 
+const setup = () => {
+  const onSubmit = jest.fn();
+  const onCancel = jest.fn();
+  const utils = render(<Form title="Crear pokemon" onSubmit={() => onSubmit} onCancel={onCancel}/>)
+  const container = utils.container;
+
+  const inputName = container.querySelector('#name');
+  const inputImage = container.querySelector('#image');
+  const inputAttack = container.querySelector('#attack');
+  const inputDefense = container.querySelector('#defense');
+  const inputHP = container.querySelector('#hp');
+  const inputType = container.querySelector('#type');
+  const btnSave = screen.getByLabelText('Guardar');
+  const btnCancel = screen.getByLabelText('Cancelar');
+
+  return {
+    inputName,
+    inputImage,
+    inputAttack,
+    inputDefense,
+    inputHP,
+    inputType,
+    onCancel,
+    onSubmit,
+    btnSave,
+    btnCancel,
+    ...utils,
+  }
+}
 
 describe('Probar componente <Form/>', () => {
   it('Renderiza formulario', () => {
-    const component = render(<Form title="Crear pokemon" onSubmit={() => {}}/>)
+    const {
+      inputName,
+      inputImage,
+      inputAttack,
+      inputDefense,
+      inputHP,
+      inputType,
+      btnCancel,
+      btnSave,
+    } = setup()
 
-    // title
     const title = screen.getByText('Crear pokemon');
-
-    // inputs
-    const inputName = component.container.querySelector('#name');
-    const inputImage = component.container.querySelector('#image');
-    const inputAttack = component.container.querySelector('#attack');
-    const inputDefense = component.container.querySelector('#defense');
-    const inputHP = component.container.querySelector('#hp');
-    const inputType = component.container.querySelector('#type');
-
-    // buttons
-    const btnSave = screen.getByLabelText('Guardar');
-    const btnCancel = screen.getByLabelText('Cancelar');
 
     expect(title).toBeInTheDocument();
     expect(inputName).toBeInTheDocument();
@@ -61,4 +87,81 @@ describe('Probar componente <Form/>', () => {
     expect(btnCancel).toBeInTheDocument();
   });
 
+  test('Comprueba que se llama el prop onCancel', () => {
+    const {onCancel} = setup();
+    const btnCancel = screen.getByLabelText('Cancelar');
+    fireEvent.click(btnCancel);
+    expect(onCancel).toHaveBeenCalled();
+  });
+
+  test('Comprobar validación input Nombre', () => {
+    setup();
+    const btnSave = screen.getByLabelText('Guardar');
+    fireEvent.click(btnSave);
+    expect(screen.getByText('El campo Nombre es obligatorio y debe tener al menos 3 caracteres.')).toBeInTheDocument();
+  });
+
+  test('Comprobar validación input Imagen', () => {
+    const {inputName, btnSave} = setup()
+
+    if (inputName) {
+      fireEvent.change(inputName, {target: {value: 'Pikachu'}})
+    }
+    fireEvent.click(btnSave);
+    expect(screen.getByText('La imagen debe ser una URL válida y de tipo png ó jpg.')).toBeInTheDocument();
+  });
+
+  test('Comprobar validación input Tipo', () => {
+    const {inputName, inputImage, btnSave} = setup()
+
+    if (inputName && inputImage) {
+      fireEvent.change(inputName, {target: {value: 'Pikachu'}})
+      fireEvent.change(inputImage, {target: {value: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/016.png'}})
+    }
+
+    fireEvent.click(btnSave);
+    expect(screen.getByText('El campo Tipo no es válido, debe seleccionar un valor.')).toBeInTheDocument();
+  });
+
+  test('Comprobar validación input Ataque', () => {
+    const {inputName, inputImage, inputType, btnSave} = setup()
+
+    if (inputName && inputImage && inputType) {
+      fireEvent.change(inputName, {target: {value: 'Pikachu'}})
+      fireEvent.change(inputImage, {target: {value: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/016.png'}})
+      fireEvent.change(inputType, {target: {value: 'water'}})
+    }
+
+    fireEvent.click(btnSave);
+    expect(screen.getByText('El campo Ataque debe ser un número entre 0 y 100.')).toBeInTheDocument();
+  });
+
+  test('Comprobar validación input Defensa', () => {
+    const {inputName, inputImage, inputType, inputAttack, btnSave} = setup()
+
+    if (inputName && inputImage && inputType && inputAttack) {
+      fireEvent.change(inputName, {target: {value: 'Pikachu'}})
+      fireEvent.change(inputImage, {target: {value: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/016.png'}})
+      fireEvent.change(inputType, {target: {value: 'water'}})
+      fireEvent.change(inputAttack, {target: {value: '20'}})
+    }
+
+    fireEvent.click(btnSave);
+    expect(screen.getByText('El campo Defensa debe ser un número entre 0 y 100.')).toBeInTheDocument();
+  });
+
+  test('Comprobar validación input HP', () => {
+    const {inputName, inputImage, inputType, inputAttack, inputDefense, btnSave} = setup()
+
+    if (inputName && inputImage && inputType && inputAttack && inputDefense) {
+      fireEvent.change(inputName, {target: {value: 'Pikachu'}})
+      fireEvent.change(inputImage, {target: {value: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/016.png'}})
+      fireEvent.change(inputType, {target: {value: 'water'}})
+      fireEvent.change(inputAttack, {target: {value: '20'}})
+      fireEvent.change(inputDefense, {target: {value: '20'}})
+    }
+
+    fireEvent.click(btnSave);
+    expect(screen.getByText('El campo HP debe ser un número entre 0 y 100.')).toBeInTheDocument();
+  });
 })

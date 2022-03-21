@@ -4,7 +4,6 @@ import PokemonService, {Pokemon, PokemonType} from "../services/PokemonService";
 import save from '../assets/icons/save.svg';
 import cancel from '../assets/icons/close.svg';
 import Icon from "./Icon";
-import plus from "../assets/icons/plus.svg";
 
 interface Props {
     title: string
@@ -166,36 +165,33 @@ class Form extends Component<Props, State> {
     }
 
     private submit() {
-        this.setState({submit: true});
+        this.setState({submit: true}, () => {
+            if (!this.validateString('name', this.state.name)) {
+                return;
+            }
+            if (!this.validateImage(this.state.image)) {
+                return;
+            }
+            if (!this.validateSelect('type', this.state.type)) {
+                return;
+            }
+            if (!this.validateNumber('attack', this.state.attack)) {
+                return;
+            }
+            if (!this.validateNumber('defense', this.state.defense)) {
+                return;
+            }
+            if (!this.validateNumber('hp', this.state.hp)) {
+                return;
+            }
 
-        if (!this.validateString('name', this.state.name)) {
-            return;
-        }
-        if (!this.validateImage(this.state.image)) {
-            return;
-        }
-        if (!this.validateSelect('type', this.state.type)) {
-            return;
-        }
-        if (!this.validateNumber('attack', this.state.attack)) {
-            return;
-        }
-        if (!this.validateNumber('defense', this.state.defense)) {
-            return;
-        }
-        if (!this.validateNumber('hp', this.state.defense)) {
-            return;
-        }
+            if (typeof this.props.pokemon === 'undefined') {
+                this.create();
+                return;
+            }
 
-
-        console.log('submit');
-
-        if (typeof this.props.pokemon === 'undefined') {
-            this.create();
-            return;
-        }
-
-        this.update();
+            this.update();
+        });
     }
 
     private cancel() {
@@ -289,13 +285,30 @@ class Form extends Component<Props, State> {
         })
     }
 
-    private update() {
+    private async update() {
         if (!this.props.pokemon?.id) {
             alert('No se puede actualizar el pokemon actual, recargue la página e intente nuevamente');
             return;
         }
 
-        PokemonService.update(this.props.pokemon.id,{
+        try {
+            const res = await PokemonService.update(6627, {
+                name: this.state.name,
+                attack: parseInt(this.state.attack),
+                defense: parseInt(this.state.defense),
+                image: this.state.image,
+                hp: parseInt(this.state.hp),
+                type: this.state.type as PokemonType,
+            })
+            console.log('myres', res)
+
+            this.props.onSubmit(this.props.pokemon);
+        } catch (e) {
+            console.log('error')
+            console.log(e);
+            this.props.onSubmit(this.props.pokemon);
+        }
+        PokemonService.update(this.props.pokemon.id, {
             name: this.state.name,
             attack: parseInt(this.state.attack),
             defense: parseInt(this.state.defense),
@@ -307,8 +320,8 @@ class Form extends Component<Props, State> {
                 this.clear();
                 this.props.onSubmit(pokemon);
             }).catch(() => {
-                alert('Ha ocurrido un error, compruebe su conexión a Internet y vuelva a intentarlo.');
-            })
+            alert('Ha ocurrido un error, compruebe su conexión a Internet y vuelva a intentarlo.');
+        })
     }
 
     private setPokemon(pokemon: Pokemon | undefined) {
