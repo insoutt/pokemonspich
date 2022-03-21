@@ -79,6 +79,12 @@ class Form extends Component<Props, State> {
         }
     }
 
+    componentWillReceiveProps(nextProps: Props) {
+        if (this.props.pokemon?.id !== nextProps.pokemon?.id) {
+            this.setPokemon(nextProps.pokemon);
+        }
+    }
+
     componentDidMount() {
         this.setPokemon(this.props.pokemon);
     }
@@ -327,6 +333,7 @@ class Form extends Component<Props, State> {
 
     private setPokemon(pokemon: Pokemon | undefined) {
         if (!pokemon) {
+            this.clear();
             return;
         }
 
