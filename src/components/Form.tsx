@@ -96,7 +96,7 @@ class Form extends Component<Props, State> {
             <form onSubmit={event => event.preventDefault()}>
                 <div className="grid">
                     <div className="grid-item">
-                        <label htmlFor="name">Nombre:</label> <input id="name" value={this.state.name}  onChange={(event) => this.updateInput(event, 'name')} type="text"/>
+                        <label htmlFor="name">Nombre:</label> <input id="name" value={this.state.name} onChange={(event) => this.updateInput(event, 'name')} type="text"/>
                     </div>
                     <div className="grid-item">
                         <label htmlFor="attack">Ataque:</label> <input id="attack" value={this.state.attack} onChange={(event) => this.updateInput(event, 'attack')} type="text"/>
@@ -121,10 +121,10 @@ class Form extends Component<Props, State> {
                     </div>
                 </div>
                 <div className="flex justify-center">
-                    <button onClick={this.submit.bind(this)} className="btn btn=primary">
+                    <button aria-label="Guardar" onClick={this.submit.bind(this)} className="btn btn=primary">
                         <Icon icon={save}/> Guardar
                     </button>
-                    <button onClick={this.cancel.bind(this)} className="btn btn=secondary">
+                    <button aria-label="Cancelar" onClick={this.cancel.bind(this)} className="btn btn=secondary">
                         <Icon icon={cancel}/> Cancelar
                     </button>
                 </div>
