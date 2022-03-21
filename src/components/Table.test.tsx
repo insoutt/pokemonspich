@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, screen, within } from '@testing-library/react';
+import {render, fireEvent, screen, within, act} from '@testing-library/react';
 import Table from './Table';
 import {Pokemon} from "../services/PokemonService";
 
@@ -31,26 +31,43 @@ const pokemons: Pokemon[] = [
 ];
 
 
-test('Renderizar tabla de pokemones', () => {
-  render(<Table pokemons={pokemons} total={pokemons.length} />)
-  // @ts-ignore
-  pokemons.forEach((pokemon) => {
-    const row = screen.getByText(pokemon.name).closest("tr");
-
-    // Contenido
+describe('Probar componente <Table/>', () => {
+  it('Renderiza tabla de pokemones', () => {
+    render(<Table pokemons={pokemons} total={pokemons.length} />)
     // @ts-ignore
-    const utils = within(row);
-    expect(utils.getByText(pokemon.attack)).toBeInTheDocument();
-    expect(utils.getByText(pokemon.name)).toBeInTheDocument();
-    expect(utils.getByText(pokemon.defense)).toBeInTheDocument();
-    expect(utils.getByAltText(pokemon.name)).toBeInTheDocument();
+    pokemons.forEach((pokemon) => {
+      const row = screen.getByText(pokemon.name).closest("tr");
 
-    // Acciones
-    expect(utils.getAllByLabelText('edit')[0]).toBeInTheDocument();
-    expect(utils.getAllByLabelText('delete')[0]).toBeInTheDocument();
+      // Contenido
+      // @ts-ignore
+      const utils = within(row);
+      expect(utils.getByText(pokemon.attack)).toBeInTheDocument();
+      expect(utils.getByText(pokemon.name)).toBeInTheDocument();
+      expect(utils.getByText(pokemon.defense)).toBeInTheDocument();
+      expect(utils.getByAltText(pokemon.name)).toBeInTheDocument();
 
+      // Acciones
+      expect(utils.getAllByLabelText('edit')[0]).toBeInTheDocument();
+      expect(utils.getAllByLabelText('delete')[0]).toBeInTheDocument();
+
+    });
+
+    // Total
+    expect(screen.getByText(`Se muestran ${pokemons.length} de ${pokemons.length} pokemones`)).toBeInTheDocument();
   });
 
-  // Total
-  expect(screen.getByText(`Se muestran ${pokemons.length} de ${pokemons.length} pokemones`)).toBeInTheDocument();
-});
+  it('Comprueba que se llama el prop onEdit', () => {
+    const onEdit = jest.fn();
+    act(() => {
+      render(<Table pokemons={pokemons} total={pokemons.length} onEdit={onEdit}/>);
+    })
+    pokemons.forEach((pokemon) => {
+      const row = screen.getByText(pokemon.name).closest("tr");
+      // @ts-ignore
+      const utils = within(row);
+      expect(utils.getAllByLabelText('edit')[0]).toBeInTheDocument();
+      fireEvent.click(utils.getAllByLabelText('edit')[0]);
+      expect(onEdit).toHaveBeenCalledWith(pokemon);
+    });
+  });
+})
